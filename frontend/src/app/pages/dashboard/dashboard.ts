@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
+import { catchError, EMPTY } from 'rxjs';
 
-import { Account, AccountService } from '../../core/services/account.service';
+import { AccountService } from '../../core/services/account.service';
 import { AuthService } from '../../core/auth/auth.service';
+import { Account } from '../../core/models/account.model';
 
 @Component({
   selector: 'app-dashboard',
@@ -32,13 +34,15 @@ export class DashboardComponent implements OnInit {
     }
 
     this.user = JSON.parse(storedUser);
-    this.accountService.getAccountById(this.user.id).subscribe({
-      next: (account) => {
-        this.user = account;
-        this.balance = account.balance;
-        localStorage.setItem('loggedInUser', JSON.stringify(account));
-      },
-      error: () => this.router.navigate(['/login'])
+    this.accountService.getAccountById(this.user.id).pipe(
+      catchError(() => {
+        this.router.navigate(['/login']);
+        return EMPTY;
+      })
+    ).subscribe((account) => {
+      this.user = account;
+      this.balance = account.balance;
+      localStorage.setItem('loggedInUser', JSON.stringify(account));
     });
   }
 

@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { catchError, of } from 'rxjs';
 
-import { AccountService, Transaction } from '../../core/services/account.service';
+import { AccountService } from '../../core/services/account.service';
+import { Transaction } from '../../core/models/account.model';
 
 @Component({
   selector: 'app-history',
@@ -25,13 +27,10 @@ export class HistoryComponent implements OnInit {
     }
 
     const user = JSON.parse(loggedInUser);
-    this.accountService.getTransactions(user.id).subscribe({
-      next: (transactions) => {
-        this.transactions = transactions;
-      },
-      error: () => {
-        this.transactions = [];
-      }
+    this.accountService.getTransactions(user.id).pipe(
+      catchError(() => of([]))
+    ).subscribe((transactions) => {
+      this.transactions = transactions;
     });
   }
 }

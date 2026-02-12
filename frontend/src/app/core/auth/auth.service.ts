@@ -1,25 +1,30 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { map, Observable } from 'rxjs';
+
 import { environment } from '../../../environments/environment';
+import { ApiResponse } from '../models/api-response.model';
+import { AuthRequest, AuthResponse } from '../models/auth.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private baseUrl = environment.apiUrl + '/api/auth';
+  private baseUrl = `${environment.apiUrl}/auth`;
 
   constructor(private http: HttpClient) {}
 
-  register(data: { username: string; password: string }) {
-    return this.http.post<string>(`${this.baseUrl}/register`, data);
+  register(data: AuthRequest): Observable<AuthResponse> {
+    return this.http
+      .post<ApiResponse<AuthResponse>>(`${this.baseUrl}/register`, data)
+      .pipe(map((response) => response.data));
   }
 
-  login(data: { username: string; password: string }) {
-    return this.http.post<{ token: string }>(
-      `${this.baseUrl}/login`,
-      data
-    );
+  login(data: AuthRequest): Observable<AuthResponse> {
+    return this.http
+      .post<ApiResponse<AuthResponse>>(`${this.baseUrl}/login`, data)
+      .pipe(map((response) => response.data));
   }
 
   saveToken(token: string): void {
