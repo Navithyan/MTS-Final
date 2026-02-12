@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { switchMap } from 'rxjs';
+import { catchError, EMPTY, switchMap } from 'rxjs';
 
 import { AuthService } from '../../core/auth/auth.service';
 import { AccountService } from '../../core/services/account.service';
@@ -29,24 +29,25 @@ export class LoginComponent {
   login() {
     this.authService.login({ username: this.username, password: this.password }).pipe(
       switchMap((res) => {
-        this.authService.saveToken(res.token);
-        return this.accountService.getAllAccounts();
-      })
-    ).subscribe({
-      next: (accounts) => {
-        const account = accounts.find((a) => a.holderName === this.username);
-        if (!account) {
-          alert('No account mapped to this user. Please create account first.');
-          this.authService.logout();
-          return;
+        if (res.token) {
+          this.authService.saveToken(res.token);
         }
-
-        localStorage.setItem('loggedInUser', JSON.stringify(account));
-        this.router.navigate(['/dashboard']);
-      },
-      error: () => {
+        return this.accountService.getAllAccounts();
+      }),
+      catchError(() => {
         alert('Invalid credentials');
+        return EMPTY;
+      })
+    ).subscribe((accounts) => {
+      const account = accounts.find((a) => a.holderName === this.username);
+      if (!account) {
+        alert('No account mapped to this user. Please create account first.');
+        this.authService.logout();
+        return;
       }
+
+      localStorage.setItem('loggedInUser', JSON.stringify(account));
+      this.router.navigate(['/dashboard']);
     });
   }
 }

@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { catchError, EMPTY } from 'rxjs';
 
-import { Account, AccountService } from '../../core/services/account.service';
+import { AccountService } from '../../core/services/account.service';
+import { Account } from '../../core/models/account.model';
 
 @Component({
   standalone: true,
@@ -23,12 +25,14 @@ export class AccountDetailsComponent implements OnInit {
     }
 
     const parsedUser = JSON.parse(loggedInUser) as Account;
-    this.accountService.getAccountById(parsedUser.id).subscribe({
-      next: (account) => {
-        this.user = account;
-        localStorage.setItem('loggedInUser', JSON.stringify(account));
-      },
-      error: () => this.router.navigate(['/login'])
+    this.accountService.getAccountById(parsedUser.id).pipe(
+      catchError(() => {
+        this.router.navigate(['/login']);
+        return EMPTY;
+      })
+    ).subscribe((account) => {
+      this.user = account;
+      localStorage.setItem('loggedInUser', JSON.stringify(account));
     });
   }
 }

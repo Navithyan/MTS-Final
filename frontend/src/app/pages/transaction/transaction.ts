@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { catchError, EMPTY, switchMap } from 'rxjs';
 
-import { Account, AccountService } from '../../core/services/account.service';
+import { AccountService } from '../../core/services/account.service';
+import { Account } from '../../core/models/account.model';
 
 @Component({
   selector: 'app-transaction',
@@ -54,17 +56,16 @@ export class TransactionComponent implements OnInit {
       fromAccountId: this.loggedUser.id,
       toAccountId,
       amount
-    }).subscribe({
-      next: () => {
-        alert('Money sent successfully!');
-        this.accountService.getAccountById(this.loggedUser.id).subscribe((updatedAccount) => {
-          localStorage.setItem('loggedInUser', JSON.stringify(updatedAccount));
-          this.router.navigate(['/dashboard']);
-        });
-      },
-      error: (err) => {
+    }).pipe(
+      switchMap(() => this.accountService.getAccountById(this.loggedUser.id)),
+      catchError((err) => {
         alert(err?.error?.message || 'Transfer failed');
-      }
+        return EMPTY;
+      })
+    ).subscribe((updatedAccount) => {
+      alert('Money sent successfully!');
+      localStorage.setItem('loggedInUser', JSON.stringify(updatedAccount));
+      this.router.navigate(['/dashboard']);
     });
   }
 }
