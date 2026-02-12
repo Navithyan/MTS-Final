@@ -4,18 +4,18 @@
     <h2>Account Information</h2>
 
     <div class="detail-row">
-      <span>Username</span>
-      <strong>{{ user?.username }}</strong>
-    </div>
-
-    <div class="detail-row">
-      <span>Password</span>
-      <strong>{{ user?.password }}</strong>
+      <span>Holder Name</span>
+      <strong>{{ user?.holderName }}</strong>
     </div>
 
     <div class="detail-row">
       <span>Account ID</span>
-      <strong>{{ user?.accountId }}</strong>
+      <strong>{{ user?.id }}</strong>
+    </div>
+
+    <div class="detail-row">
+      <span>Available Balance</span>
+      <strong>₹ {{ user?.balance }}</strong>
     </div>
 
   </div>

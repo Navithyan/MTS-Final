@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 
+import { Account, AccountService } from '../../core/services/account.service';
+import { AuthService } from '../../core/auth/auth.service';
+
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -11,27 +14,36 @@ import { RouterModule, Router } from '@angular/router';
 })
 export class DashboardComponent implements OnInit {
 
-  user: any;
+  user!: Account;
   balance: number = 0;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private accountService: AccountService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
+    const storedUser = localStorage.getItem('loggedInUser');
 
-  const storedUser = localStorage.getItem('loggedInUser');
+    if (!storedUser) {
+      this.router.navigate(['/login']);
+      return;
+    }
 
-  if (storedUser) {
     this.user = JSON.parse(storedUser);
-    this.balance = this.user.balance;
-  } else {
-    this.router.navigate(['/login']);
+    this.accountService.getAccountById(this.user.id).subscribe({
+      next: (account) => {
+        this.user = account;
+        this.balance = account.balance;
+        localStorage.setItem('loggedInUser', JSON.stringify(account));
+      },
+      error: () => this.router.navigate(['/login'])
+    });
   }
-}
-
 
   logout() {
-    localStorage.removeItem('loggedInUser');   // clear session
+    this.authService.logout();
     this.router.navigate(['/login']);
   }
-
 }
