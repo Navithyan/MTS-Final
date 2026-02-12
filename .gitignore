@@ -1,0 +1,15 @@
+# Node
+node_modules/
+.angular/
+
+# Logs
+*.log
+
+# Environment
+.env
+
+# VSCode
+.vscode/
+
+# OS
+.DS_Store
