@@ -1,0 +1,32 @@
+<nav class="navbar">
+  <div class="nav-title">MNM Bank</div>
+  <button class="logout-btn" (click)="logout()">Logout</button>
+</nav>
+
+<div class="dashboard-wrapper">
+
+  <div class="balance-card">
+    <div class="balance-label">Available Balance</div>
+    <div class="balance-amount"><h1>₹ {{ balance }}</h1></div>
+  </div>
+
+  <div class="action-grid">
+
+    <div class="action-card" routerLink="/account-details">
+      <div class="action-title">Account Details</div>
+      <div class="action-desc">View personal and account information</div>
+    </div>
+
+    <div class="action-card" routerLink="/transaction">
+      <div class="action-title">Make Transaction</div>
+      <div class="action-desc">Send money securely</div>
+    </div>
+
+    <div class="action-card" routerLink="/history">
+      <div class="action-title">Transaction History</div>
+      <div class="action-desc">View all credit & debit records</div>
+    </div>
+
+  </div>
+
+</div>

@@ -1,0 +1,30 @@
+<div class="create-container">
+
+  <h2>Create Account</h2>
+
+  <input 
+    type="text" 
+    placeholder="Enter New Username"
+    [(ngModel)]="newUsername">
+
+  <input 
+    type="password" 
+    placeholder="Enter New Password"
+    [(ngModel)]="newPassword">
+
+  <input 
+    type="number" 
+    placeholder="Enter Base Amount"
+    [(ngModel)]="baseAmount">
+
+  <button (click)="createAccount()" class="primary-btn">
+    Create Account
+  </button>
+
+  <p>Already have an account?</p>
+
+  <button routerLink="/login" class="secondary-btn">
+    Login
+  </button>
+
+</div>

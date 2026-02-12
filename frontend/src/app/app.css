@@ -1,0 +1,29 @@
+.navbar {
+  height: 60px;
+  background: #111827;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 30px;
+  border-bottom: 1px solid #1f2937;
+}
+
+.logo {
+  font-weight: 600;
+  letter-spacing: 2px;
+}
+
+.nav-links a {
+  margin-left: 20px;
+  text-decoration: none;
+  color: #94a3b8;
+  transition: 0.3s;
+}
+
+.nav-links a:hover {
+  color: #7c3aed;
+}
+
+.container {
+  padding: 40px;
+}

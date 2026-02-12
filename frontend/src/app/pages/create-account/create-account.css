@@ -1,0 +1,80 @@
+/* Page background */
+:host {
+  display: block;
+  background-color: #f4f6f9;
+  min-height: 100vh;
+  padding-top: 80px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Card container */
+.create-container {
+  width: 400px;
+  margin: auto;
+  padding: 30px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Heading */
+.create-container h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #2d3e50;
+}
+
+/* Inputs */
+.create-container input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #dcdcdc;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+.create-container input:focus {
+  border-color: #2d5be3;
+  outline: none;
+}
+
+/* Buttons */
+.create-container button {
+  width: 100%;
+  padding: 12px;
+  border-radius: 6px;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 5px;
+}
+
+/* Primary button */
+.primary-btn {
+  background-color: #2d5be3;
+  color: white;
+}
+
+.primary-btn:hover {
+  background-color: #1f47c1;
+}
+
+/* Secondary button */
+.secondary-btn {
+  background-color: #e9ecef;
+  color: #333;
+}
+
+.secondary-btn:hover {
+  background-color: #d6d8db;
+}
+
+/* Text */
+.create-container p {
+  text-align: center;
+  margin: 15px 0 8px;
+  font-size: 14px;
+  color: #555;
+}

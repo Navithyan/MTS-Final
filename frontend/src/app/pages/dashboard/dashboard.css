@@ -1,0 +1,60 @@
+.dashboard-wrapper {
+  padding: 50px 80px;
+  background: #f4f7fb;
+  min-height: calc(100vh - 70px);
+}
+
+/* Balance Card */
+.balance-card {
+  background: linear-gradient(135deg, #1e3a8a, #2563eb);
+  padding: 40px;
+  border-radius: 16px;
+  color: white;
+  margin-bottom: 40px;
+  box-shadow: 0 15px 30px rgba(37, 99, 235, 0.25);
+}
+
+.balance-label {
+  font-size: 16px;
+  opacity: 0.9;
+}
+
+.balance-amount {
+  font-size: 36px;
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+/* Action Grid */
+.action-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 25px;
+}
+
+/* Action Cards */
+.action-card {
+  background: white;
+  padding: 30px;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+.action-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+  border-left: 6px solid #2563eb;
+}
+
+.action-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.action-desc {
+  font-size: 14px;
+  color: #6b7280;
+}

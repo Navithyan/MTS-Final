@@ -1,0 +1,26 @@
+<div class="history-container">
+  <h2>Transaction History</h2>
+
+  <table *ngIf="transactions.length > 0">
+    <thead>
+      <tr>
+        <th>From</th>
+        <th>To</th>
+        <th>Amount</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let txn of transactions">
+        <td>{{ txn.from }}</td>
+        <td>{{ txn.to }}</td>
+        <td>{{ txn.amount }}</td>
+        <td>{{ txn.date }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="transactions.length === 0">
+    No transactions yet.
+  </p>
+</div>
