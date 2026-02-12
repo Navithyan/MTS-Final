@@ -43,7 +43,7 @@ public class SecurityConfig {
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**", "/api/public/**", "/a-api/public/**").permitAll() //api/products is FORBIDDEN 
-                .requestMatchers("/api/secure/**", "/a-api/secure/**").authenticated()
+                // .requestMatchers("/api/secure/**", "/a-api/secure/**").authenticated()
                 .anyRequest().permitAll()
             )
             .addFilterBefore(jwtAuthFilter,

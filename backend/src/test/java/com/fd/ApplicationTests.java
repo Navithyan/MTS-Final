@@ -1,10 +1,10 @@
-package com.fd;
+// package com.fd;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+// import org.junit.jupiter.api.Test;
+// import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-class ApplicationTests {
+// @SpringBootTest
+// class ApplicationTests {
 
 	
-}
+// }

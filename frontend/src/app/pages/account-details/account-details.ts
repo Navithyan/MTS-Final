@@ -13,7 +13,7 @@ import { Account } from '../../core/models/account.model';
   styleUrls: ['./account-details.css']
 })
 export class AccountDetailsComponent implements OnInit {
-  user!: Account;
+  user: Account | null = null;
 
   constructor(private router: Router, private accountService: AccountService) {}
 
@@ -31,8 +31,21 @@ export class AccountDetailsComponent implements OnInit {
         return EMPTY;
       })
     ).subscribe((account) => {
-      this.user = account;
-      localStorage.setItem('loggedInUser', JSON.stringify(account));
+      // setTimeout(() => {
+
+        console.log(this.user);
+  
+        this.user = account;
+        
+        console.log("i am inside account details subscribe");
+        console.log(account);
+        console.log(this.user);
+        if (account) {
+          localStorage.setItem('loggedInUser', JSON.stringify(account));
+        }
+        
+      // })
     });
   }
 }
+
