@@ -12,10 +12,10 @@
     </thead>
     <tbody>
       <tr *ngFor="let txn of transactions">
-        <td>{{ txn.from }}</td>
-        <td>{{ txn.to }}</td>
+        <td>{{ txn.fromAccountId }}</td>
+        <td>{{ txn.toAccountId }}</td>
         <td>{{ txn.amount }}</td>
-        <td>{{ txn.date }}</td>
+        <td>{{ txn.createdOn }}</td>
       </tr>
     </tbody>
   </table>

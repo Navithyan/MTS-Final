@@ -2,12 +2,16 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';   // 👈 ADD THIS
+import { RouterModule } from '@angular/router';
+import { switchMap } from 'rxjs';
+
+import { AuthService } from '../../core/auth/auth.service';
+import { AccountService } from '../../core/services/account.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],  // 👈 ADD RouterModule
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './login.html',
   styleUrls: ['./login.css']
 })
@@ -16,30 +20,33 @@ export class LoginComponent {
   username: string = '';
   password: string = '';
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private accountService: AccountService
+  ) {}
 
   login() {
+    this.authService.login({ username: this.username, password: this.password }).pipe(
+      switchMap((res) => {
+        this.authService.saveToken(res.token);
+        return this.accountService.getAllAccounts();
+      })
+    ).subscribe({
+      next: (accounts) => {
+        const account = accounts.find((a) => a.holderName === this.username);
+        if (!account) {
+          alert('No account mapped to this user. Please create account first.');
+          this.authService.logout();
+          return;
+        }
 
-  const storedUser = localStorage.getItem('user');
-
-  if (!storedUser) {
-    alert("No account found. Please create account.");
-    return;
+        localStorage.setItem('loggedInUser', JSON.stringify(account));
+        this.router.navigate(['/dashboard']);
+      },
+      error: () => {
+        alert('Invalid credentials');
+      }
+    });
   }
-
-  const user = JSON.parse(storedUser);
-
-  if (this.username === user.username && this.password === user.password) {
-
-    // Save logged-in user
-    localStorage.setItem('loggedInUser', JSON.stringify(user));
-
-    this.router.navigate(['/dashboard']);
-
-  } else {
-    alert("Invalid credentials");
-  }
-}
-
-
 }

@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
+import { Account, AccountService } from '../../core/services/account.service';
+
 @Component({
   selector: 'app-transaction',
   standalone: true,
@@ -14,11 +16,15 @@ export class TransactionComponent implements OnInit {
 
   transactionForm!: FormGroup;
   fromAccount: string = '';
+  loggedUser!: Account;
 
-  constructor(private fb: FormBuilder, private router: Router) {}
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private accountService: AccountService
+  ) {}
 
   ngOnInit(): void {
-
     const loggedUser = localStorage.getItem('loggedInUser');
 
     if (!loggedUser) {
@@ -26,8 +32,8 @@ export class TransactionComponent implements OnInit {
       return;
     }
 
-    const user = JSON.parse(loggedUser);
-    this.fromAccount = user.accountId;
+    this.loggedUser = JSON.parse(loggedUser);
+    this.fromAccount = this.loggedUser.id;
 
     this.transactionForm = this.fb.group({
       toAccount: ['', Validators.required],
@@ -36,48 +42,29 @@ export class TransactionComponent implements OnInit {
   }
 
   transfer(): void {
+    if (this.transactionForm.invalid) {
+      alert('Please fill all fields correctly');
+      return;
+    }
 
-  if (this.transactionForm.invalid) {
-    alert("Please fill all fields correctly");
-    return;
+    const amount = Number(this.transactionForm.value.amount);
+    const toAccountId = this.transactionForm.value.toAccount;
+
+    this.accountService.transfer({
+      fromAccountId: this.loggedUser.id,
+      toAccountId,
+      amount
+    }).subscribe({
+      next: () => {
+        alert('Money sent successfully!');
+        this.accountService.getAccountById(this.loggedUser.id).subscribe((updatedAccount) => {
+          localStorage.setItem('loggedInUser', JSON.stringify(updatedAccount));
+          this.router.navigate(['/dashboard']);
+        });
+      },
+      error: (err) => {
+        alert(err?.error?.message || 'Transfer failed');
+      }
+    });
   }
-
-  const loggedUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
-  const amount = this.transactionForm.value.amount;
-  const toAccount = this.transactionForm.value.toAccount;
-
-  if (amount > loggedUser.balance) {
-    alert("Insufficient balance");
-    return;
-  }
-
-  // Deduct balance
-  loggedUser.balance -= amount;
-
-  // 🔥 Create transaction object
-  const transaction = {
-    from: loggedUser.accountId,
-    to: toAccount,
-    amount: amount,
-    date: new Date().toLocaleString()
-  };
-
-  // 🔥 Get existing history
-  const history = JSON.parse(localStorage.getItem('transactions') || '[]');
-
-  // Add new transaction
-  history.push(transaction);
-
-  // Save updated history
-  localStorage.setItem('transactions', JSON.stringify(history));
-
-  // Update user data
-  localStorage.setItem('loggedInUser', JSON.stringify(loggedUser));
-  localStorage.setItem('user', JSON.stringify(loggedUser));
-
-  alert("Money sent successfully!");
-
-  this.router.navigate(['/dashboard']);
-}
-
 }
