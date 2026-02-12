@@ -1,4 +1,4 @@
-package com.fd;
+ProductControllerTest.javapackage com.fd;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.times;

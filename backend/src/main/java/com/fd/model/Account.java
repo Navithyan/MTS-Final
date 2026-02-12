@@ -4,20 +4,28 @@ import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name="myAccount")
 public class Account {
-	@Id
-	private String id; // only getter
-    static int counter; 
+	// Source - https://stackoverflow.com/a/79505566
+	// Posted by Mehdi Rahimi, modified by community. See post 'Timeline' for change history
+	// Retrieved 2026-02-11, License - CC BY-SA 4.0
+	@Id 
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long pk; 
+	@Column(unique=true)
+	private String accountId; // only getter
+//    static int counter = 1; 
     @Column(name="holderName", nullable=false)
     private String holderName;
     @Column(name="balance", nullable=false)
     private double balance;
-    @Column(name="status", nullable=false)
+    @Column(name="status")
     private Boolean status; // True if active, false if not
     @Column(name="version")
     private int version; 
@@ -27,21 +35,32 @@ public class Account {
     public Account(){
     	super();
     }
-    // parametrized constructor
-    public Account(String holderName, double balance){
-    	super(); 
-    	this.holderName = holderName; 
-    	this.balance = balance; 
-    	this.id = "ACC" + counter; 
-    	counter++; 
-    	this.status = true; 
-    	this.version = 1; 
-    	updateLastUpdated(); 
-    }
-
-    // all getters
-    public String getId(){
-        return id; 
+//    // parametrized constructor
+//    public Account(String holderName, double balance){
+//    	super(); 
+//    	this.holderName = holderName; 
+//    	this.balance = balance; 
+////    	this.id = "ACC" + counter; 
+////    	counter++; 
+//    	this.status = true; 
+//    	this.version = 1; 
+//    	updateLastUpdated(); 
+//    }
+    
+    
+    public Account(String accountId, String holderName, double balance, Boolean status, int version,
+			LocalDateTime lastUpdated) {
+		super();
+		this.accountId = accountId;
+		this.holderName = holderName;
+		this.balance = balance;
+		this.status = status;
+		this.version = version;
+		this.lastUpdated = lastUpdated;
+	}
+	// all getters
+    public String getAccountId(){
+        return accountId; 
     }
     
     public String getHolderName(){
@@ -72,8 +91,8 @@ public class Account {
         updateLastUpdated();
     }
 
-    public void setId(String id) {
-		this.id = id;
+    public void setAccountId(String accountId) {
+		this.accountId = accountId;
 	}
 
 	public void setBalance(double balance) {
@@ -93,12 +112,14 @@ public class Account {
 	}
 
 	public void changeStatus(){
+		// true if false, false if true
         this.status = !status; 
         upgradeVersion();
         updateLastUpdated();
     }
 
     public void updateLastUpdated(){
+    	// current time
         this.lastUpdated =  LocalDateTime.now(); 
     }
 
@@ -108,25 +129,8 @@ public class Account {
     }
     
     // functions
-    public double credit(double amount){
-        balance+=amount; 
-        // returns balance 
-        updateLastUpdated();
-        return balance; 
-    } 
 
-    public double debit(double amount){
-        if (balance<=amount){
-            balance-=amount;
-            updateLastUpdated();
-        }
-        else{
-            System.out.println("Not enough money!");
-        }
-        // returns balance
-        return balance; 
-    }
-
+    // returns true if active and false if not. 
     public boolean isActive(){
         return status;
     }

@@ -16,5 +16,5 @@ public interface IProductService {
     ProductDTO getProductByName(String pname) throws ResourceNotFoundException;
     Long countProductsByName(String pname);
     Page<ProductDTO> getProductsByNameUsingPage (String pname, Pageable pageable);
-
+    
 }
