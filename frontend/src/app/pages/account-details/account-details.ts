@@ -1,8 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { catchError, EMPTY } from 'rxjs';
-
 import { AccountService } from '../../core/services/account.service';
 import { Account } from '../../core/models/account.model';
 
@@ -13,39 +11,51 @@ import { Account } from '../../core/models/account.model';
   styleUrls: ['./account-details.css']
 })
 export class AccountDetailsComponent implements OnInit {
-  user: Account | null = null;
 
-  constructor(private router: Router, private accountService: AccountService) {}
+  user: Account = {
+    id: '',
+    holderName: '',
+    balance: 0,
+    status: false,
+    version: 0
+  };
+
+  loading = true;
+
+  constructor(
+    private router: Router,
+    private accountService: AccountService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
-    const loggedInUser = localStorage.getItem('loggedInUser');
-    if (!loggedInUser) {
+
+    const storedUser = localStorage.getItem('loggedInUser');
+
+    if (!storedUser) {
       this.router.navigate(['/login']);
       return;
     }
 
-    const parsedUser = JSON.parse(loggedInUser) as Account;
-    this.accountService.getAccountById(parsedUser.id).pipe(
-      catchError(() => {
-        this.router.navigate(['/login']);
-        return EMPTY;
-      })
-    ).subscribe((account) => {
-      // setTimeout(() => {
+    const parsedUser: Account = JSON.parse(storedUser);
 
-        console.log(this.user);
-  
-        this.user = account;
-        
-        console.log("i am inside account details subscribe");
-        console.log(account);
-        console.log(this.user);
-        if (account) {
+    this.accountService.getAccountById(parsedUser.id)
+      .subscribe({
+        next: (account) => {
+          console.log("API RESPONSE:", account);
+
+          this.user = account;
+          this.loading = false;
+
           localStorage.setItem('loggedInUser', JSON.stringify(account));
+
+          // 🔥 FORCE UI UPDATE
+          this.cdr.detectChanges();
+        },
+        error: (err) => {
+          console.error("Fetch failed", err);
+          this.loading = false;
         }
-        
-      // })
-    });
+      });
   }
 }
-

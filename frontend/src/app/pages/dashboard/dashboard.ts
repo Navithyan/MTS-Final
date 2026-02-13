@@ -26,25 +26,28 @@ export class DashboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const storedUser = localStorage.getItem('loggedInUser');
 
-    if (!storedUser) {
-      this.router.navigate(['/login']);
-      return;
-    }
+  const storedUser = localStorage.getItem('loggedInUser');
 
-    this.user = JSON.parse(storedUser);
-    this.accountService.getAccountById(this.user.id).pipe(
-      catchError(() => {
-        this.router.navigate(['/login']);
-        return EMPTY;
-      })
-    ).subscribe((account) => {
-      this.user = account;
-      this.balance = account.balance;
-      localStorage.setItem('loggedInUser', JSON.stringify(account));
-    });
+  if (!storedUser) {
+    this.router.navigate(['/login']);
+    return;
   }
+
+  this.user = JSON.parse(storedUser);
+
+  this.accountService.getAccountById(this.user.id)
+    .subscribe({
+      next: (account) => {
+        this.user = account;   // 🔥 Only update user
+        localStorage.setItem('loggedInUser', JSON.stringify(account));
+      },
+      error: () => {
+        this.router.navigate(['/login']);
+      }
+    });
+}
+
 
   logout() {
     this.authService.logout();

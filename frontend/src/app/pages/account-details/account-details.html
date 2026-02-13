@@ -1,22 +1,30 @@
 <div class="details-wrapper">
 
   <div class="details-card">
+
     <h2>Account Information</h2>
 
-    <div class="detail-row">
-      <span>Holder Name</span>
-      <!-- <strong>hi</strong> -->
-      <strong>{{ user?.holderName }}</strong>
+    <div *ngIf="loading">
+      Loading account details...
     </div>
 
-    <div class="detail-row">
-      <span>Account ID</span>
-      <strong>{{ user?.id }}</strong>
-    </div>
+    <div *ngIf="!loading">
 
-    <div class="detail-row">
-      <span>Available Balance</span>
-      <strong>₹ {{ user?.balance }}</strong>
+      <div class="detail-row">
+        <span>Holder Name</span>
+        <strong>{{ user.holderName }}</strong>
+      </div>
+
+      <div class="detail-row">
+        <span>Account ID</span>
+        <strong>{{ user.id }}</strong>
+      </div>
+
+      <div class="detail-row">
+        <span>Available Balance</span>
+        <strong>₹ {{ user.balance }}</strong>
+      </div>
+
     </div>
 
   </div>

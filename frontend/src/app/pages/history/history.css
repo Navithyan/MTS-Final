@@ -1,62 +1,50 @@
-/* Page background */
-:host {
-  display: block;
-  min-height: 100vh;
-  background-color: #f4f6f9;
-  padding-top: 80px;
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-/* Container card */
 .history-container {
-  width: 800px;
-  margin: auto;
+  max-width: 900px;
+  margin: 50px auto;
   padding: 30px;
-  background: #ffffff;
+  background: white;
   border-radius: 12px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
 }
 
-/* Heading */
 .history-container h2 {
-  text-align: center;
   margin-bottom: 25px;
-  color: #2d3e50;
+  color: #2c3e50;
 }
 
-/* Table styling */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 14px;
-}
-
-/* Table header */
-thead {
-  background-color: #2d5be3;
-  color: white;
-}
-
-th {
-  padding: 12px;
-  text-align: left;
-}
-
-/* Table body */
-td {
-  padding: 12px;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-/* Hover effect */
-tbody tr:hover {
-  background-color: #f1f4ff;
-}
-
-/* Empty message */
-.history-container p {
+.loading-text,
+.empty-text {
   text-align: center;
-  margin-top: 20px;
   color: #777;
+  font-size: 16px;
+}
+
+.txn-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.txn-card:last-child {
+  border-bottom: none;
+}
+
+.txn-info p {
+  margin: 4px 0;
   font-size: 14px;
+}
+
+.txn-amount {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.credit {
+  color: #2ecc71;
+}
+
+.debit {
+  color: #e74c3c;
 }

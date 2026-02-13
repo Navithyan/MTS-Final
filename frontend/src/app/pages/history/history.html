@@ -1,26 +1,39 @@
 <div class="history-container">
+
   <h2>Transaction History</h2>
 
-  <table *ngIf="transactions.length > 0">
-    <thead>
-      <tr>
-        <th>From</th>
-        <th>To</th>
-        <th>Amount</th>
-        <th>Date</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let txn of transactions">
-        <td>{{ txn.fromAccountId }}</td>
-        <td>{{ txn.toAccountId }}</td>
-        <td>{{ txn.amount }}</td>
-        <td>{{ txn.createdOn }}</td>
-      </tr>
-    </tbody>
-  </table>
+  <div *ngIf="loading" class="loading-text">
+    Loading transactions...
+  </div>
 
-  <p *ngIf="transactions.length === 0">
+  <div *ngIf="!loading && transactions.length === 0" class="empty-text">
     No transactions yet.
-  </p>
+  </div>
+
+  <div *ngIf="!loading && transactions.length > 0">
+
+    <div class="txn-card" *ngFor="let txn of transactions">
+
+      <div class="txn-info">
+        <p><strong>From:</strong> {{ txn.fromAccountId }}</p>
+        <p><strong>To:</strong> {{ txn.toAccountId }}</p>
+        <p><strong>Date:</strong> {{ txn.createdOn | date:'medium' }}</p>
+      </div>
+
+      <div
+        class="txn-amount"
+        [ngClass]="{
+          'credit': isCredit(txn),
+          'debit': isDebit(txn)
+        }">
+
+        <span *ngIf="isCredit(txn)">+ ₹ {{ txn.amount }}</span>
+        <span *ngIf="isDebit(txn)">- ₹ {{ txn.amount }}</span>
+
+      </div>
+
+    </div>
+
+  </div>
+
 </div>

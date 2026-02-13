@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { catchError, EMPTY, switchMap } from 'rxjs';
@@ -10,7 +10,11 @@ import { AccountService } from '../../core/services/account.service';
 @Component({
   selector: 'app-create-account',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterModule   // ✅ REQUIRED for routerLink
+  ],
   templateUrl: './create-account.html',
   styleUrls: ['./create-account.css']
 })
@@ -19,6 +23,7 @@ export class CreateAccountComponent {
   newUsername: string = '';
   newPassword: string = '';
   baseAmount: number = 1000;
+  errorMessage: string = '';
 
   constructor(
     private router: Router,
@@ -26,9 +31,12 @@ export class CreateAccountComponent {
     private accountService: AccountService
   ) {}
 
-  createAccount() {
+  createAccount(): void {
+
+    this.errorMessage = '';
+
     if (!this.newUsername || !this.newPassword || this.baseAmount < 1000) {
-      alert('Please provide username/password and minimum amount of 1000');
+      this.errorMessage = 'Minimum amount should be 1000';
       return;
     }
 
@@ -36,20 +44,40 @@ export class CreateAccountComponent {
       username: this.newUsername,
       password: this.newPassword
     }).pipe(
-      switchMap(() => this.accountService.createAccount({
-        id: '',
-        holderName: this.newUsername,
-        balance: this.baseAmount,
-        status: true,
-        version: 1
-      })),
+
+      switchMap(() =>
+        this.accountService.createAccount({
+          id: '',
+          holderName: this.newUsername,
+          balance: this.baseAmount,
+          status: true,
+          version: 1
+        })
+      ),
+
       catchError((err) => {
-        alert(err?.error?.message || 'Account creation failed');
+        this.errorMessage =
+          err?.error?.message || 'Account creation failed';
         return EMPTY;
       })
+
     ).subscribe((account) => {
-      alert(`Account created successfully! Your Account ID: ${account.id}`);
+
+      alert(`Account created successfully!
+Account ID: ${account.id}`);
+
+      // Clear form
+      this.newUsername = '';
+      this.newPassword = '';
+      this.baseAmount = 1000;
+
+      // Navigate to login
       this.router.navigate(['/login']);
     });
+  }
+
+  // ✅ If using (click) instead of routerLink
+  goToLogin(): void {
+    this.router.navigate(['/login']);
   }
 }
