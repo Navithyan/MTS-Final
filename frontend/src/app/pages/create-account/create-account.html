@@ -1,30 +1,46 @@
-<div class="create-container">
+<div class="create-wrapper">
 
-  <h2>Create Account</h2>
+  <div class="create-card">
 
-  <input 
-    type="text" 
-    placeholder="Enter New Username"
-    [(ngModel)]="newUsername">
+    <h2>Create New Account</h2>
 
-  <input 
-    type="password" 
-    placeholder="Enter New Password"
-    [(ngModel)]="newPassword">
+    <div class="form-group">
+      <input
+        type="text"
+        placeholder="Enter New Username"
+        [(ngModel)]="newUsername"
+      />
+    </div>
 
-  <input 
-    type="number" 
-    placeholder="Enter Base Amount"
-    [(ngModel)]="baseAmount">
+    <div class="form-group">
+      <input
+        type="password"
+        placeholder="Enter New Password"
+        [(ngModel)]="newPassword"
+      />
+    </div>
 
-  <button (click)="createAccount()" class="primary-btn">
-    Create Account
-  </button>
+    <div class="form-group">
+      <input
+        type="number"
+        placeholder="Enter base amount"
+        [(ngModel)]="baseAmount"
+      />
+      <small class="form-note">Minimum Rs.1000</small>
+    </div>
 
-  <p>Already have an account?</p>
+    <button class="primary-btn" (click)="createAccount()">
+      Create Account
+    </button>
 
-  <button class="secondary-btn" (click)="goToLogin()">
-    Login
-  </button>
+    <button class="secondary-btn" (click)="goToLogin()">
+      Already have an account? Login
+    </button>
+
+    <p class="error-text" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </p>
+
+  </div>
 
 </div>

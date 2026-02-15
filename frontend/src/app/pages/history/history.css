@@ -1,3 +1,25 @@
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.back-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  background: #2e86de;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.back-btn:hover {
+  background: #1b4f72;
+}
+
+
 .history-container {
   max-width: 900px;
   margin: 50px auto;

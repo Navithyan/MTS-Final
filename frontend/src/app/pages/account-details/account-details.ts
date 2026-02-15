@@ -1,12 +1,15 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AccountService } from '../../core/services/account.service';
 import { Account } from '../../core/models/account.model';
 
 @Component({
   standalone: true,
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    RouterModule   // ✅ REQUIRED FOR routerLink
+  ],
   templateUrl: './account-details.html',
   styleUrls: ['./account-details.css']
 })
@@ -42,6 +45,7 @@ export class AccountDetailsComponent implements OnInit {
     this.accountService.getAccountById(parsedUser.id)
       .subscribe({
         next: (account) => {
+
           console.log("API RESPONSE:", account);
 
           this.user = account;
@@ -49,7 +53,6 @@ export class AccountDetailsComponent implements OnInit {
 
           localStorage.setItem('loggedInUser', JSON.stringify(account));
 
-          // 🔥 FORCE UI UPDATE
           this.cdr.detectChanges();
         },
         error: (err) => {
@@ -57,5 +60,10 @@ export class AccountDetailsComponent implements OnInit {
           this.loading = false;
         }
       });
+  }
+
+  // ✅ OPTIONAL SAFE METHOD (if you prefer click instead of routerLink)
+  goBack(): void {
+    this.router.navigate(['/dashboard']);
   }
 }

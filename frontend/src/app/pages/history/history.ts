@@ -2,14 +2,14 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { catchError, of } from 'rxjs';
-
+import { RouterModule } from '@angular/router';
 import { AccountService } from '../../core/services/account.service';
 import { Transaction } from '../../core/models/account.model';
 
 @Component({
   selector: 'app-history',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,RouterModule],
   templateUrl: './history.html',
   styleUrls: ['./history.css']
 })

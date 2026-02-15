@@ -1,71 +1,101 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { catchError, EMPTY, switchMap } from 'rxjs';
-
+import { FormsModule } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
 import { AccountService } from '../../core/services/account.service';
 import { Account } from '../../core/models/account.model';
 
 @Component({
-  selector: 'app-transaction',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterModule
+  ],
   templateUrl: './transaction.html',
   styleUrls: ['./transaction.css']
 })
 export class TransactionComponent implements OnInit {
 
-  transactionForm!: FormGroup;
-  fromAccount: string = '';
-  loggedUser!: Account;
+  user!: Account;
+
+  toAccountId: string = '';
+  amount: number | null = null;
+
+  receiverName: string = '';
+  showConfirmation: boolean = false;
 
   constructor(
-    private fb: FormBuilder,
     private router: Router,
     private accountService: AccountService
   ) {}
 
   ngOnInit(): void {
-    const loggedUser = localStorage.getItem('loggedInUser');
 
-    if (!loggedUser) {
+    const storedUser = localStorage.getItem('loggedInUser');
+
+    if (!storedUser) {
       this.router.navigate(['/login']);
       return;
     }
 
-    this.loggedUser = JSON.parse(loggedUser);
-    this.fromAccount = this.loggedUser.id;
-
-    this.transactionForm = this.fb.group({
-      toAccount: ['', Validators.required],
-      amount: ['', [Validators.required, Validators.min(1)]]
-    });
+    this.user = JSON.parse(storedUser);
   }
 
-  transfer(): void {
-    if (this.transactionForm.invalid) {
-      alert('Please fill all fields correctly');
+  // 🔹 Fetch receiver name when account ID entered
+  fetchReceiver(): void {
+
+    if (!this.toAccountId) {
+      this.receiverName = '';
       return;
     }
 
-    const amount = Number(this.transactionForm.value.amount);
-    const toAccountId = this.transactionForm.value.toAccount;
+    this.accountService.getAccountById(this.toAccountId)
+      .subscribe({
+        next: (account) => {
+          this.receiverName = account.holderName;
+        },
+        error: () => {
+          this.receiverName = 'Invalid Account ID';
+        }
+      });
+  }
+
+  // 🔹 Show confirmation box
+  prepareTransfer(): void {
+
+    if (!this.toAccountId || !this.amount || this.amount <= 0) {
+      alert('Enter valid details');
+      return;
+    }
+
+    if (!this.receiverName || this.receiverName === 'Invalid Account ID') {
+      alert('Invalid receiver account');
+      return;
+    }
+
+    this.showConfirmation = true;
+  }
+
+  // 🔹 Final transfer happens here
+  confirmTransfer(): void {
 
     this.accountService.transfer({
-      fromAccountId: this.loggedUser.id,
-      toAccountId,
-      amount
-    }).pipe(
-      switchMap(() => this.accountService.getAccountById(this.loggedUser.id)),
-      catchError((err) => {
-        alert(err?.error?.message || 'Transfer failed');
-        return EMPTY;
-      })
-    ).subscribe((updatedAccount) => {
-      alert('Money sent successfully!');
-      localStorage.setItem('loggedInUser', JSON.stringify(updatedAccount));
-      this.router.navigate(['/dashboard']);
+      fromAccountId: this.user.id,
+      toAccountId: this.toAccountId,
+      amount: this.amount!
+    }).subscribe({
+      next: () => {
+        alert('Transfer Successful');
+        this.router.navigate(['/dashboard']);
+      },
+      error: () => {
+        alert('Transfer Failed');
+      }
     });
+  }
+
+  cancelTransfer(): void {
+    this.showConfirmation = false;
   }
 }

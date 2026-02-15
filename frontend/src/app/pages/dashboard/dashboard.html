@@ -1,30 +1,40 @@
-<nav class="navbar">
-  <div class="nav-title">Welcome !</div>
-  <button class="logout-btn" (click)="logout()">Logout</button>
-</nav>
+<div class="dashboard-container">
 
-<div class="dashboard-wrapper">
+  <!-- Top Header -->
+  <div class="dashboard-top">
 
-  <div class="balance-card">
-    <div class="balance-label">Available Balance</div>
-    <div class="balance-amount"><h1>₹ {{ user?.balance }}</h1></div>
+    <h2>Welcome {{ user?.holderName }} !</h2>
+
+    <button class="logout-btn" (click)="logout()">
+      Logout
+    </button>
+
   </div>
 
-  <div class="action-grid">
+  <!-- Balance Section -->
+  <div class="balance-card">
+    <p>Available Balance</p>
+    <div class="balance-amount">
+      <h1>₹ {{ user?.balance }}</h1>
+    </div>
+  </div>
+
+  <!-- Action Section -->
+  <div class="dashboard-actions">
 
     <div class="action-card" routerLink="/account-details">
-      <div class="action-title">Account Details</div>
-      <div class="action-desc">View personal and account information</div>
+      <h3>Account Details</h3>
+      <p>View your account information</p>
     </div>
 
     <div class="action-card" routerLink="/transaction">
-      <div class="action-title">Make Transaction</div>
-      <div class="action-desc">Send money securely</div>
+      <h3>Fund Transfer</h3>
+      <p>Transfer money securely</p>
     </div>
 
     <div class="action-card" routerLink="/history">
-      <div class="action-title">Transaction History</div>
-      <div class="action-desc">View all credit & debit records</div>
+      <h3>Transaction History</h3>
+      <p>View all past transactions</p>
     </div>
 
   </div>

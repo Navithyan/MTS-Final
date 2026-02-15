@@ -1,15 +1,24 @@
 <div class="history-container">
 
-  <h2>Transaction History</h2>
+  <!-- Header with Back Button -->
+  <div class="history-header">
+    <h2>Transaction History</h2>
+    <button class="back-btn" routerLink="/dashboard">
+      Go Back to Dashboard
+    </button>
+  </div>
 
+  <!-- Loading -->
   <div *ngIf="loading" class="loading-text">
     Loading transactions...
   </div>
 
+  <!-- Empty -->
   <div *ngIf="!loading && transactions.length === 0" class="empty-text">
     No transactions yet.
   </div>
 
+  <!-- Transactions -->
   <div *ngIf="!loading && transactions.length > 0">
 
     <div class="txn-card" *ngFor="let txn of transactions">

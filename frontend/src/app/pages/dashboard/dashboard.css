@@ -1,60 +1,116 @@
-.dashboard-wrapper {
-  padding: 50px 80px;
-  background: #f4f7fb;
-  min-height: calc(100vh - 70px);
+/* Main Container */
+.dashboard-container {
+  padding: 40px 60px;
+  background-color: #f5f7fa;
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Top Header */
+.dashboard-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.dashboard-top h2 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+/* Logout Button */
+.logout-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  background: #e74c3c;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.3s ease;
+}
+
+.logout-btn:hover {
+  background: #c0392b;
 }
 
 /* Balance Card */
 .balance-card {
-  background: linear-gradient(135deg, #1e3a8a, #2563eb);
-  padding: 40px;
-  border-radius: 16px;
+  background: linear-gradient(135deg, #2e86de, #1b4f72);
   color: white;
-  margin-bottom: 40px;
-  box-shadow: 0 15px 30px rgba(37, 99, 235, 0.25);
+  padding: 30px;
+  border-radius: 12px;
+  margin-bottom: 35px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
 }
 
-.balance-label {
-  font-size: 16px;
+.balance-card p {
+  font-size: 14px;
+  margin-bottom: 8px;
   opacity: 0.9;
 }
 
-.balance-amount {
-  font-size: 36px;
-  font-weight: 600;
-  margin-top: 10px;
+.balance-amount h1 {
+  font-size: 32px;
+  margin: 0;
+  font-weight: 700;
 }
 
-/* Action Grid */
-.action-grid {
+/* Action Section */
+.dashboard-actions {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 25px;
 }
 
-/* Action Cards */
+/* Individual Action Card */
 .action-card {
   background: white;
-  padding: 30px;
-  border-radius: 14px;
+  padding: 25px;
+  border-radius: 12px;
   cursor: pointer;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.06);
   transition: all 0.3s ease;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  border-left: 5px solid #2e86de;
+}
+
+.action-card h3 {
+  margin: 0 0 10px 0;
+  font-size: 18px;
+  color: #2c3e50;
+}
+
+.action-card p {
+  font-size: 14px;
+  color: #6c757d;
+  margin: 0;
 }
 
 .action-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-  border-left: 6px solid #2563eb;
+  transform: translateY(-5px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+  border-left-color: #1b4f72;
 }
 
-.action-title {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 8px;
-}
+/* Responsive */
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 25px;
+  }
 
-.action-desc {
-  font-size: 14px;
-  color: #6b7280;
+  .dashboard-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .balance-card {
+    padding: 20px;
+  }
+
+  .balance-amount h1 {
+    font-size: 26px;
+  }
 }

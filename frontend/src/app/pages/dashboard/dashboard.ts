@@ -46,6 +46,11 @@ export class DashboardComponent implements OnInit {
         this.router.navigate(['/login']);
       }
     });
+    this.accountService.getAccountById(this.user.id)
+      .subscribe((account) => {
+      this.user = account;
+    });
+
 }
 
 

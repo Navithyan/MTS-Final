@@ -13,7 +13,7 @@ import { AccountService } from '../../core/services/account.service';
   imports: [
     CommonModule,
     FormsModule,
-    RouterModule   // ✅ REQUIRED for routerLink
+    RouterModule
   ],
   templateUrl: './create-account.html',
   styleUrls: ['./create-account.css']
@@ -22,7 +22,7 @@ export class CreateAccountComponent {
 
   newUsername: string = '';
   newPassword: string = '';
-  baseAmount: number = 1000;
+  baseAmount: number | null = null;
   errorMessage: string = '';
 
   constructor(
@@ -35,8 +35,13 @@ export class CreateAccountComponent {
 
     this.errorMessage = '';
 
-    if (!this.newUsername || !this.newPassword || this.baseAmount < 1000) {
-      this.errorMessage = 'Minimum amount should be 1000';
+    if (!this.newUsername || !this.newPassword) {
+      this.errorMessage = 'Username and Password are required';
+      return;
+    }
+
+    if (this.baseAmount === null || this.baseAmount < 1000) {
+      this.errorMessage = 'Minimum amount should be Rs.1000';
       return;
     }
 
@@ -49,7 +54,7 @@ export class CreateAccountComponent {
         this.accountService.createAccount({
           id: '',
           holderName: this.newUsername,
-          balance: this.baseAmount,
+          balance: this.baseAmount!,
           status: true,
           version: 1
         })
@@ -63,20 +68,12 @@ export class CreateAccountComponent {
 
     ).subscribe((account) => {
 
-      alert(`Account created successfully!
-Account ID: ${account.id}`);
+      alert(`Account created successfully!\nAccount ID: ${account.id}`);
 
-      // Clear form
-      this.newUsername = '';
-      this.newPassword = '';
-      this.baseAmount = 1000;
-
-      // Navigate to login
       this.router.navigate(['/login']);
     });
   }
 
-  // ✅ If using (click) instead of routerLink
   goToLogin(): void {
     this.router.navigate(['/login']);
   }

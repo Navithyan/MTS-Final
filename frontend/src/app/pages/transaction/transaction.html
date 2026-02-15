@@ -1,36 +1,76 @@
-<div class="page-wrapper">
-  <div class="transaction-card">
-    <h2>Make Transaction</h2>
+<div class="page-container">
 
-    <div class="from-account">
-      From Account:
-      <strong>{{ fromAccount }}</strong>
+  <div class="page-top">
+    <h2>Fund Transfer</h2>
+    <button class="back-btn" routerLink="/dashboard">
+      Go Back to Dashboard
+    </button>
+  </div>
+
+  <div class="transfer-card">
+
+    <!-- FROM ACCOUNT -->
+    <div class="form-group">
+      <label>From Account</label>
+      <input type="text" [value]="user.id" disabled />
     </div>
 
-    <form [formGroup]="transactionForm" (ngSubmit)="transfer()">
+    <!-- TO ACCOUNT -->
+    <div class="form-group">
+      <label>To Account</label>
+      <input
+        type="text"
+        [(ngModel)]="toAccountId"
+        (blur)="fetchReceiver()"
+      />
+    </div>
 
-      <div class="form-group">
-        <label>Recipient Account ID</label>
-        <input
-          type="text"
-          formControlName="toAccount"
-          placeholder="Enter recipient Account ID"
-        />
+    <!-- RECEIVER NAME -->
+    <div *ngIf="receiverName" class="receiver-info">
+      Sending amount to:
+      <strong>{{ receiverName }}</strong>
+    </div>
+
+    <!-- AMOUNT -->
+    <div class="form-group">
+      <label>Amount</label>
+      <input
+        type="number"
+        [(ngModel)]="amount"
+        placeholder="Enter the amount"
+      />
+    </div>
+
+    <!-- PREPARE BUTTON -->
+    <button
+      *ngIf="!showConfirmation"
+      class="primary-btn"
+      (click)="prepareTransfer()"
+    >
+      Transfer Funds
+    </button>
+
+    <!-- CONFIRMATION SECTION -->
+    <div *ngIf="showConfirmation" class="confirmation-box">
+
+      <h3>Confirm Transaction</h3>
+
+      <p><strong>From:</strong> {{ user.id }}</p>
+      <p><strong>To:</strong> {{ toAccountId }}</p>
+      <p><strong>Receiver:</strong> {{ receiverName }}</p>
+      <p><strong>Amount:</strong> ₹ {{ amount }}</p>
+
+      <div class="confirm-buttons">
+        <button class="confirm-btn" (click)="confirmTransfer()">
+          Confirm
+        </button>
+        <button class="cancel-btn" (click)="cancelTransfer()">
+          Cancel
+        </button>
       </div>
 
-      <div class="form-group">
-        <label>Amount</label>
-        <input
-          type="number"
-          formControlName="amount"
-          placeholder="Enter the amount"
-        />
-      </div>
+    </div>
 
-      <button type="submit" class="primary-btn">
-        Send Money
-      </button>
-
-    </form>
   </div>
+
 </div>
