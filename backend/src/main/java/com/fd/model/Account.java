@@ -75,7 +75,7 @@ public class Account {
         return status; 
     }
 
-    public int getVersion(){
+    public Integer getVersion(){
         return version; 
     }
 

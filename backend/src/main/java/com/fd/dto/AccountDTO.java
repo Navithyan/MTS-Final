@@ -25,7 +25,7 @@ public class AccountDTO {
     private double balance;
 
     private Boolean status;
-    private int version;
+    private Integer version;
     private LocalDateTime lastUpdated;
 
     public AccountDTO() {
@@ -101,7 +101,7 @@ public class AccountDTO {
         this.status = status;
     }
 
-    public int getVersion() {
+    public Integer getVersion() {
         return version;
     }
 
